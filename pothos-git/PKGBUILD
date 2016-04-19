@@ -1,0 +1,44 @@
+# Maintainer: Christopher Hewitt <hewittc@users.noreply.github.com>
+pkgname=pothos-git
+pkgver=pothos.0.3.2.r31.g6983c05
+pkgrel=1
+pkgdesc="The Pothos data-flow framework."
+arch=('i686' 'x86_64')
+url="https://github.com/pothosware/pothos"
+license=('custom:Boost Software License Version 1.0')
+depends=('apr' 'python')
+optdepends=('soapysdr' 'qwt')
+makedepends=('cmake' 'doxygen')
+
+_gitname=pothos
+_gitbranch=master
+source=("pothos::git+https://github.com/pothosware/$_gitname#branch=$_gitbranch")
+md5sums=('SKIP')
+conflicts=('pothos')
+provides=('pothos')
+
+pkgver() {
+  cd "$srcdir/$_gitname"
+  git describe --long | sed 's/\([^-]*-g\)/r\1/;s/^v//;s/-/./g'
+}
+
+prepare() {
+  cd "$srcdir/$_gitname"
+  git submodule update --init --recursive
+
+  sed -i 's/find_package(Qwt)/#find_package(Qwt)/' plotters/CMakeLists.txt
+}
+
+build() {
+  cd "$srcdir/$_gitname"
+  mkdir -p build
+  cd build
+  cmake -DCMAKE_INSTALL_PREFIX=/usr ../
+  make
+}
+
+package() {
+  cd "$srcdir/$_gitname/build"
+  make DESTDIR="$pkgdir" install
+}
+
