@@ -1,6 +1,6 @@
 # Maintainer: Christopher Hewitt <hewittc@users.noreply.github.com>
 pkgname=hackrf-git
-pkgver=2014.08.1.r53.ga1b8535
+pkgver=2015.07.2.r78.gb278f05
 pkgrel=1
 pkgdesc="Driver for HackRF, allowing general purpose software defined radio (SDR)."
 arch=('i686' 'x86_64')
