@@ -1,0 +1,40 @@
+# Maintainer: Christopher Hewitt <hewittc@users.noreply.github.com>
+pkgname=parallella-thermald-git
+pkgver=r57.8ce7690
+pkgrel=1
+pkgdesc="Parallella thermal watchdog daemon"
+arch=('armv7h')
+url="https://github.com/parallella/parallella-utils"
+license=('unknown')
+
+_gitname=parallella-utils
+_gitbranch=master
+source=("parallella-utils::git+https://github.com/parallella/$_gitname#branch=$_gitbranch"
+        'epiphany.h')
+md5sums=('SKIP'
+        'c81fca28717a981024d13a490becf308')
+conflicts=('parallella-thermald')
+provides=('parallella-thermald')
+
+pkgver() {
+  cd "$srcdir/$_gitname"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+prepare() {
+  cp epiphany.h "$srcdir/$_gitname/thermald/"
+  sed -i 's/<misc\/epiphany.h>/"epiphany.h"/' "$srcdir/$_gitname/thermald/thermald.c"
+  sed -i 's/\/lib\//$(prefix)\/lib\//' "$srcdir/$_gitname/thermald/Makefile"
+  sed -i 's/$(exec_prefix)\/sbin/$(exec_prefix)\/bin/' "$srcdir/$_gitname/thermald/Makefile"
+}
+
+build() {
+  cd "$srcdir/$_gitname/thermald"
+  make
+}
+
+package() {
+  cd "$srcdir/$_gitname/thermald"
+  make DESTDIR="$pkgdir" install
+}
+
