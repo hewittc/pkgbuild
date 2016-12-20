@@ -1,0 +1,33 @@
+# Maintainer: Christopher Hewitt <hewittc@users.noreply.github.com>
+pkgname=parallella-pal-git
+pkgver=r1065.1d93ac6
+pkgrel=1
+pkgdesc="Parallel Architectures Library -- Optimized routines for math, synchronization, and inter-processor communication"
+arch=('armv7h')
+url="https://github.com/parallella/pal"
+license=('Apache License, Version 2.0')
+
+_gitname=pal
+_gitbranch=master
+source=("pal::git+https://github.com/parallella/$_gitname#branch=$_gitbranch")
+md5sums=('SKIP')
+conflicts=('parallella-pal')
+provides=('parallella-pal')
+
+pkgver() {
+  cd "$srcdir/$_gitname"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  cd "$srcdir/$_gitname"
+  ./bootstrap
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "$srcdir/$_gitname"
+  make DESTDIR="$pkgdir" install
+}
+
