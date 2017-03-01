@@ -1,6 +1,6 @@
 # Maintainer: Christopher Hewitt <hewittc@users.noreply.github.com>
 pkgname=pothos-git
-pkgver=pothos.0.3.2.r31.g6983c05
+pkgver=pothos.0.4.1.r73.g7f768465
 pkgrel=1
 pkgdesc="The Pothos data-flow framework."
 arch=('i686' 'x86_64')
