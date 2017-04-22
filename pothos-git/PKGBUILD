@@ -6,7 +6,7 @@ pkgdesc="The Pothos data-flow framework."
 arch=('i686' 'x86_64')
 url="https://github.com/pothosware/pothos"
 license=('custom:Boost Software License Version 1.0')
-depends=('apr' 'python')
+depends=('apr' 'python' 'poco')
 optdepends=('soapysdr' 'qwt')
 makedepends=('cmake' 'doxygen')
 
