@@ -1,5 +1,5 @@
 pkgname="radare2-git"
-pkgver=20170508.14601.3f506e088
+pkgver=20170531.14852.98bd7e7dd
 pkgrel=1
 pkgdesc="Open-source tools to disasm, debug, analyze and manipulate binary files"
 arch=('i686' 'x86_64' 'armv7h' 'aarch64')
