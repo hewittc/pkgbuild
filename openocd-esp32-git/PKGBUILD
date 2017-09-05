@@ -1,0 +1,39 @@
+# Maintainer: Christopher Hewitt <hewittc@users.noreply.github.com>
+pkgname=openocd-esp32-git
+pkgver=r7332.cc5b0f7a
+pkgrel=1
+pkgdesc='Debugging, in-system programming and boundary-scan testing for ESP32'
+arch=('i686' 'x86_64' 'armv7h' 'aarch64')
+url='http://openocd.org/'
+license=('GPL')
+depends=('libftdi' 'libftdi-compat' 'libusb' 'libusb-compat' 'hidapi')
+options=(!strip)
+_features=(amtjtagaccel armjtagew buspirate ftdi gw16012 jlink oocd_trace
+ opendous osbdm parport presto_libftdi remote-bitbang rlink stlink ti-icdi ulink usbprog vsllink
+ aice cmsis-dap dummy jtag_vpi openjtag_ftdi usb-blaster-2 usb_blaster_libftdi)
+source=("$pkgname::git+https://github.com/espressif/openocd-esp32.git")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/${pkgname}"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  cd "${srcdir}/${pkgname}"
+  ./bootstrap
+  ./configure --program-suffix=-esp32 --prefix=/usr ${_features[@]/#/--enable-} --disable-werror
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}"
+  make DESTDIR="$pkgdir" install
+  (cd "$pkgdir"/usr/share/openocd/scripts/target && mv 1986ве1т.cfg 1986we1t.cfg)
+  (cd "$pkgdir"/usr/share/openocd/scripts/target && mv к1879xб1я.cfg k1879xb1ya.cfg)
+
+  (cd "$pkgdir"/usr/share && mv openocd openocd-esp32)
+  (cd "$pkgdir"/usr/share/info && mv openocd.info-1 openocd-esp32.info-1)
+  (cd "$pkgdir"/usr/share/info && mv openocd.info-2 openocd-esp32.info-2)
+  (cd "$pkgdir"/usr/share/info && mv openocd.info openocd-esp32.info)
+}
