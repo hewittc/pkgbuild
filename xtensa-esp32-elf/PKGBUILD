@@ -1,4 +1,4 @@
-pkgname="esp32-sdk"
+pkgname="xtensa-esp32-elf"
 pkgver=2.1
 pkgrel=1
 pkgdesc="Espressif IoT Development Framework. Official development framework for ESP32."
