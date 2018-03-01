@@ -1,17 +1,17 @@
 # Maintainer: Christopher Hewitt <hewittc@users.noreply.github.com>
 pkgname=libiio
-pkgver=0.11
+pkgver=0.14
 pkgrel=1
 pkgdesc="Library for interfacing with IIO devices."
 arch=('i686' 'x86_64' 'armv7h' 'aarch64')
 url="https://github.com/analogdevicesinc/libiio"
 license=('GPL2')
-depends=('libxml2' 'libusb' 'libserialport' 'libaio')
+depends=('libxml2' 'libusb' 'libaio')
 makedepends=('cmake')
-optmakedepends=('doxygen')
+optmakedepends=('doxygen' 'libserialport')
 
 source=("https://github.com/analogdevicesinc/libiio/archive/v$pkgver.tar.gz" "000-doxyfile-path.patch")
-sha256sums=('0174111b028d84f18fb3716b22834a372a1f2575938f87e20e5cbd76747d0fdb' '3657c6c4d3ed1c14d18be02b18c32ff7d29cfca3bc9c920c12882ca576da2832')
+sha256sums=('12063db7a9366aa00bfd789db30afaddb29686bc29b3ce1e5d4adfe1c3b42527' '3657c6c4d3ed1c14d18be02b18c32ff7d29cfca3bc9c920c12882ca576da2832')
 conflicts=('libiio')
 provides=('libiio')
 
