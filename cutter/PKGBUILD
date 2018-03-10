@@ -1,5 +1,5 @@
 pkgname="cutter"
-pkgver=1.2
+pkgver=1.3
 pkgrel=1
 pkgdesc="A Qt and C++ GUI for radare2 reverse engineering framework"
 arch=('i686' 'x86_64')
@@ -10,7 +10,7 @@ depends=('qt5-base' 'qt5-svg' 'radare2')
 conflicts=('cutter-git')
 
 source=("https://github.com/radareorg/cutter/archive/v${pkgver}.tar.gz")
-sha256sums=('5b9e27dd54849744e9ac0075137fecabe4bed4e82ad220c2c0e0a348c0665783')
+sha256sums=('1fee0ec58a2ad15046a9bf3c2f4b92db385db7c7af2f6a64a13f3fb8d51b2dcf')
 
 build() {
         mkdir -p ${srcdir}/${pkgname}-${pkgver}/src/build
@@ -22,6 +22,6 @@ build() {
 package() {
 	cd ${srcdir}/${pkgname}-${pkgver}/src/build
 	mkdir -p "${pkgdir}/usr/bin/"
-	install -D -m755 cutter "${pkgdir}/usr/bin/"
+	install -D -m755 Cutter "${pkgdir}/usr/bin/cutter"
 }
 
