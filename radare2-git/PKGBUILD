@@ -1,12 +1,11 @@
 pkgname="radare2-git"
-pkgver=20171002.16144.5b5b851b9
+pkgver=2.6.0.r41.g7965a7737
 pkgrel=1
 pkgdesc="Open-source tools to disasm, debug, analyze and manipulate binary files"
 arch=('i686' 'x86_64' 'armv7h' 'aarch64')
 url="http://radare.org"
 license=('GPL3' 'LGPL3')
 makedepends=('git')
-depends=('capstone')
 provides=('radare2')
 conflicts=('radare2')
 
@@ -14,9 +13,8 @@ source=("$pkgname"::"git://github.com/radare/radare2.git")
 md5sums=('SKIP')
 
 pkgver () {
-	_date=$(date +"%Y%m%d")
 	cd "${srcdir}/${pkgname}"
-	echo "$_date.$(git rev-list --count master).$(git rev-parse --short master)"
+	git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
 build() {
