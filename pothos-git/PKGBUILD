@@ -1,12 +1,12 @@
 # Maintainer: Christopher Hewitt <hewittc@users.noreply.github.com>
 pkgname=pothos-git
-pkgver=pothos.0.5.1.r60.g69bbafcd
+pkgver=pothos.0.6.1.r15.g29957895
 pkgrel=1
 pkgdesc="The Pothos data-flow framework."
 arch=('i686' 'x86_64')
 url="https://github.com/pothosware/pothos"
 license=('custom:Boost Software License Version 1.0')
-depends=('apr' 'python' 'poco')
+depends=('apr' 'python')
 optdepends=('soapysdr' 'qwt')
 makedepends=('cmake' 'doxygen')
 conflicts=('pothos')
@@ -14,8 +14,16 @@ provides=('pothos')
 
 _gitname=pothos
 _gitbranch=master
-source=("$pkgname::git+https://github.com/pothosware/$_gitname#branch=$_gitbranch" "https://raw.githubusercontent.com/nlohmann/json/v2.1.1/src/json.hpp")
-sha256sums=('SKIP' 'faa2321beb1aa7416d035e7417fcfa59692ac3d8c202728f9bcc302e2d558f57')
+source=(
+  "$pkgname::git+https://github.com/pothosware/$_gitname#branch=$_gitbranch"
+  "https://raw.githubusercontent.com/nlohmann/json/v2.1.1/src/json.hpp"
+  "000-spuce-qt5-target-link-libraries.patch"
+)
+sha256sums=(
+  'SKIP'
+  'faa2321beb1aa7416d035e7417fcfa59692ac3d8c202728f9bcc302e2d558f57'
+  '130977c1b72c185d296382ba49509f0e72f3f5aad30ec1b62172862b75dbf9d4'
+)
 
 pkgver() {
   cd "$srcdir/$pkgname"
@@ -25,6 +33,10 @@ pkgver() {
 prepare() {
   cd "$srcdir/$pkgname"
   git submodule update --init --recursive
+
+  pushd ./spuce/
+  patch -p1 < ../../../000-spuce-qt5-target-link-libraries.patch
+  popd
 
   mkdir -p "$srcdir/$pkgname/include/nlohmann"
   cp ../json.hpp "$srcdir/$pkgname/include/nlohmann"
@@ -36,7 +48,10 @@ build() {
   cd "$srcdir/$pkgname"
   mkdir -p build
   cd build
-  cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DJSON_HPP_INCLUDE_DIR="$srcdir/$pkgname/include/nlohmann/" ../
+  cmake -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DJSON_HPP_INCLUDE_DIR="$srcdir/$pkgname/include/nlohmann/" \
+        ../
   make
 }
 
