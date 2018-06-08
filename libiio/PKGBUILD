@@ -8,10 +8,18 @@ url="https://github.com/analogdevicesinc/libiio"
 license=('GPL2')
 depends=('libxml2' 'libusb' 'libaio')
 makedepends=('cmake')
-optmakedepends=('doxygen' 'libserialport')
+optmakedepends=('doxygen' 'graphviz' 'libserialport')
 
-source=("https://github.com/analogdevicesinc/libiio/archive/v$pkgver.tar.gz" "000-doxyfile-path.patch")
-sha256sums=('a729f8ff48137ad271a3e2951f322b35c1bf2ec075b488d75c8bd071c693fd19' '3657c6c4d3ed1c14d18be02b18c32ff7d29cfca3bc9c920c12882ca576da2832')
+source=(
+  "https://github.com/analogdevicesinc/libiio/archive/v$pkgver.tar.gz"
+  "iiod.service"
+  "000-doxyfile-path.patch"
+)
+sha256sums=(
+  'a729f8ff48137ad271a3e2951f322b35c1bf2ec075b488d75c8bd071c693fd19'
+  '8edb34d8b2209b019b18944a608c82490bd359f2506fbb65d4bb217b6763580f'
+  '3657c6c4d3ed1c14d18be02b18c32ff7d29cfca3bc9c920c12882ca576da2832'
+)
 conflicts=('libiio')
 provides=('libiio')
 
@@ -28,7 +36,6 @@ build() {
         -DCMAKE_INSTALL_SBINDIR=/usr/bin \
         -DCMAKE_INSTALL_LIBDIR=/usr/lib \
         -DUDEV_RULES_INSTALL_DIR=/usr/lib/udev/rules.d ../ \
-        -DWITH_SYSTEMD=ON \
 	-DCSHARP_BINDINGS=OFF
   make
 }
@@ -38,6 +45,6 @@ package() {
   cd build
   make DESTDIR="$pkgdir" install
 
-  install -D -m644 "$srcdir/$pkgname-$pkgver/build/iiod/init/iiod.service" "$pkgdir/usr/lib/systemd/system/iiod.service"
+  install -D -m644 ../../iiod.service "$pkgdir/usr/lib/systemd/system/iiod.service"
 }
 
