@@ -1,6 +1,6 @@
 # Maintainer: Christopher Hewitt <hewittc@users.noreply.github.com>
 pkgname=libiio
-pkgver=0.14
+pkgver=0.15
 pkgrel=1
 pkgdesc="Library for interfacing with IIO devices."
 arch=('i686' 'x86_64' 'armv7h' 'aarch64')
@@ -11,7 +11,7 @@ makedepends=('cmake')
 optmakedepends=('doxygen' 'libserialport')
 
 source=("https://github.com/analogdevicesinc/libiio/archive/v$pkgver.tar.gz" "000-doxyfile-path.patch")
-sha256sums=('12063db7a9366aa00bfd789db30afaddb29686bc29b3ce1e5d4adfe1c3b42527' '3657c6c4d3ed1c14d18be02b18c32ff7d29cfca3bc9c920c12882ca576da2832')
+sha256sums=('a729f8ff48137ad271a3e2951f322b35c1bf2ec075b488d75c8bd071c693fd19' '3657c6c4d3ed1c14d18be02b18c32ff7d29cfca3bc9c920c12882ca576da2832')
 conflicts=('libiio')
 provides=('libiio')
 
@@ -27,7 +27,9 @@ build() {
   cmake -DCMAKE_INSTALL_PREFIX=/usr \
         -DCMAKE_INSTALL_SBINDIR=/usr/bin \
         -DCMAKE_INSTALL_LIBDIR=/usr/lib \
-        -DUDEV_RULES_INSTALL_DIR=/usr/lib/udev/rules.d ../
+        -DUDEV_RULES_INSTALL_DIR=/usr/lib/udev/rules.d ../ \
+        -DWITH_SYSTEMD=ON \
+	-DCSHARP_BINDINGS=OFF
   make
 }
 
@@ -36,6 +38,6 @@ package() {
   cd build
   make DESTDIR="$pkgdir" install
 
-  install -D -m644 "$startdir/iiod.service" "$pkgdir/usr/lib/systemd/system/iiod.service"
+  install -D -m644 "$srcdir/$pkgname-$pkgver/build/iiod/init/iiod.service" "$pkgdir/usr/lib/systemd/system/iiod.service"
 }
 
