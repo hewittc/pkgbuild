@@ -1,0 +1,37 @@
+pkgname=nextpnr-git
+pkgver=r1149.9c19c59
+pkgrel=1
+pkgdesc='Portable FPGA place and route tool'
+arch=('x86_64' 'i686')
+url='http://www.clifford.at/yosys/'
+license=('custom:ISC')
+
+makedepends=('cmake' 'boost' 'icestorm')
+depends=('python' 'qt5-base' 'boost-libs')
+optdepends=('yosys: logic synthesis')
+
+provides=('nextpnr')
+conflicts=('nextpnr')
+
+source=($pkgname::'git+https://github.com/YosysHQ/nextpnr.git')
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "$srcdir/$pkgname"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  cd "$srcdir/$pkgname"
+  mkdir -p build/
+  cd build/
+  cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DARCH=ice40 -DICEBOX_ROOT=/usr/share/icebox
+  make 
+}
+
+package() {
+  cd "$srcdir/$pkgname"
+  cd build/
+  make DESTDIR="$pkgdir" install
+}
+
