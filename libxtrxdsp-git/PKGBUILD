@@ -1,0 +1,33 @@
+pkgname=libxtrxdsp-git
+pkgver=r5.9152561
+pkgrel=1
+pkgdesc="DSP-specific functions for XTRX"
+arch=('x86_64' 'armv7h' 'aarch64')
+url="https://github.com/xtrx-sdr/libxtrxdsp/"
+license=('GPL2')
+
+makedepends=('cmake')
+
+provides=('libxtrxdsp')
+conflicts=('libxtrxdsp')
+
+source=(${pkgname}::"git+https://github.com/xtrx-sdr/libxtrxdsp.git")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "$pkgname"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+
+build() {
+  cd "$srcdir/$pkgname"
+  mkdir -p build
+  cd build
+  cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
+  make 
+}
+
+package() {
+  make -C "$srcdir/$pkgname/build" DESTDIR="$pkgdir" install
+}
