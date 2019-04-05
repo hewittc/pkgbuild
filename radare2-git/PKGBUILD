@@ -1,32 +1,32 @@
 pkgname="radare2-git"
-pkgver=2.6.0.r41.g7965a7737
+pkgver=3.4.1.r26.g0096dbfdb
 pkgrel=1
 pkgdesc="Open-source tools to disasm, debug, analyze and manipulate binary files"
 arch=('i686' 'x86_64' 'armv7h' 'aarch64')
 url="http://radare.org"
 license=('GPL3' 'LGPL3')
-makedepends=('git')
+
+makedepends=('ninja')
+
 provides=('radare2')
 conflicts=('radare2')
 
 source=("$pkgname"::"git://github.com/radare/radare2.git")
-md5sums=('SKIP')
+sha256sums=('SKIP')
 
 pkgver () {
-	cd "${srcdir}/${pkgname}"
-	git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+  cd "${srcdir}/${pkgname}"
+  git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
 build() {
-	cd ${srcdir}/${pkgname}
-	./configure --prefix=/usr
-	make
+  cd "${srcdir}/${pkgname}"
+  $(PYTHON) sys/meson.py --prefix="/usr" --shared
 }
 
 package() {
-	cd ${srcdir}/${pkgname}
-	make DESTDIR=${pkgdir} install
-	install -D -m644 man/* "${pkgdir}/usr/share/man/man1" 
-	rm -rf ${srcdir}/${pkgname}
+  cd "${srcdir}/${pkgname}"
+  DESTDIR="${pkgdir}" ninja -C build install
+  ln -s "radare2" "${pkgdir}/usr/bin/r2"
 }
 
