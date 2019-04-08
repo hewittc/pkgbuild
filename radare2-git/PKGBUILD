@@ -1,12 +1,12 @@
 pkgname="radare2-git"
-pkgver=3.4.1.r26.g0096dbfdb
+pkgver=3.4.1.r46.gdff5115a2
 pkgrel=1
 pkgdesc="Open-source tools to disasm, debug, analyze and manipulate binary files"
 arch=('i686' 'x86_64' 'armv7h' 'aarch64')
 url="http://radare.org"
 license=('GPL3' 'LGPL3')
 
-makedepends=('ninja')
+makedepends=('meson' 'ninja')
 
 provides=('radare2')
 conflicts=('radare2')
