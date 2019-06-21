@@ -1,6 +1,6 @@
 # Maintainer: Christopher Hewitt <hewittc@users.noreply.github.com>
 pkgname=libiio
-pkgver=0.15
+pkgver=0.18
 pkgrel=1
 pkgdesc="Library for interfacing with IIO devices."
 arch=('i686' 'x86_64' 'armv7h' 'aarch64')
@@ -16,7 +16,7 @@ source=(
   "000-doxyfile-path.patch"
 )
 sha256sums=(
-  'a729f8ff48137ad271a3e2951f322b35c1bf2ec075b488d75c8bd071c693fd19'
+  'bc2c5299974b65cfe9aa4a06d8c74d7651594e026bce416db48a2c5aa7ba2554'
   '8edb34d8b2209b019b18944a608c82490bd359f2506fbb65d4bb217b6763580f'
   '3657c6c4d3ed1c14d18be02b18c32ff7d29cfca3bc9c920c12882ca576da2832'
 )
