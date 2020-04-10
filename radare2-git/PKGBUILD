@@ -1,5 +1,5 @@
 pkgname="radare2-git"
-pkgver=3.4.1.r46.gdff5115a2
+pkgver=r23931.f31e6ca527
 pkgrel=1
 pkgdesc="Open-source tools to disasm, debug, analyze and manipulate binary files"
 arch=('i686' 'x86_64' 'armv7h' 'aarch64')
@@ -16,7 +16,7 @@ sha256sums=('SKIP')
 
 pkgver () {
   cd "${srcdir}/${pkgname}"
-  git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+  printf "r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)"
 }
 
 build() {
