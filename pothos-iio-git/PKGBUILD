@@ -1,0 +1,40 @@
+# Maintainer: Christopher Hewitt <hewittc@users.noreply.github.com>
+pkgname=pothos-iio-git
+pkgver=r25.b050663
+pkgrel=1
+pkgdesc="Industrial I/O device support for Pothos"
+arch=('i686' 'x86_64')
+url="https://github.com/pothosware/PothosIIO"
+license=('boost')
+depends=('pothos' 'libiio')
+makedepends=('cmake')
+provides=('pothos-iio')
+conflicts=('pothos-iio')
+
+_gitname=pothosiio
+_gitbranch=master
+source=(
+  "$pkgname::git+https://github.com/pothosware/$_gitname#branch=$_gitbranch"
+)
+sha256sums=(
+  'SKIP'
+)
+
+pkgver() {
+  cd "$srcdir/$pkgname"
+  printf "r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)"
+}
+
+build() {
+  mkdir -p "$srcdir/$pkgname/build"
+  cd "$srcdir/$pkgname/build"
+  cmake -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        ..
+  make
+}
+
+package() {
+  cd "$srcdir/$pkgname/build"
+  make DESTDIR="$pkgdir" install
+}
