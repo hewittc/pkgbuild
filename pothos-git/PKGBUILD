@@ -1,62 +1,52 @@
 # Maintainer: Christopher Hewitt <hewittc@users.noreply.github.com>
 pkgname=pothos-git
-pkgver=pothos.0.6.1.r15.g29957895
+pkgver=r3057.d8d8ec81
 pkgrel=1
-pkgdesc="The Pothos data-flow framework."
+pkgdesc="The Pothos data-flow framework"
 arch=('i686' 'x86_64')
-url="https://github.com/pothosware/pothos"
-license=('custom:Boost Software License Version 1.0')
-depends=('apr' 'python')
-optdepends=('soapysdr' 'qwt')
-makedepends=('cmake' 'doxygen')
-conflicts=('pothos')
+url="https://github.com/pothosware/PothosCore"
+license=('boost')
+depends=('python')
+optdepends=('soapysdr' 'qwt' 'portaudio')
+makedepends=('cmake' 'doxygen' 'nlohmann-json')
 provides=('pothos')
+conflicts=('pothos')
 
 _gitname=pothos
 _gitbranch=master
 source=(
   "$pkgname::git+https://github.com/pothosware/$_gitname#branch=$_gitbranch"
-  "https://raw.githubusercontent.com/nlohmann/json/v2.1.1/src/json.hpp"
-  "000-spuce-qt5-target-link-libraries.patch"
 )
 sha256sums=(
   'SKIP'
-  'faa2321beb1aa7416d035e7417fcfa59692ac3d8c202728f9bcc302e2d558f57'
-  '130977c1b72c185d296382ba49509f0e72f3f5aad30ec1b62172862b75dbf9d4'
 )
 
 pkgver() {
   cd "$srcdir/$pkgname"
-  git describe --long | sed 's/\([^-]*-g\)/r\1/;s/^v//;s/-/./g'
+  printf "r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)"
 }
 
 prepare() {
   cd "$srcdir/$pkgname"
   git submodule update --init --recursive
-
-  pushd ./spuce/
-  patch -p1 < ../../../000-spuce-qt5-target-link-libraries.patch
-  popd
-
-  mkdir -p "$srcdir/$pkgname/include/nlohmann"
-  cp ../json.hpp "$srcdir/$pkgname/include/nlohmann"
-
-  sed -i 's/find_package(Qwt)/#find_package(Qwt)/' plotters/CMakeLists.txt
 }
 
 build() {
-  cd "$srcdir/$pkgname"
-  mkdir -p build
-  cd build
+  mkdir -p "$srcdir/$pkgname/build"
+  cd "$srcdir/$pkgname/build"
   cmake -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX=/usr \
-        -DJSON_HPP_INCLUDE_DIR="$srcdir/$pkgname/include/nlohmann/" \
-        ../
+        -DENABLE_INTERNAL_POCO=ON \
+        -DENABLE_INTERNAL_MUPARSERX=ON \
+        -DENABLE_INTERNAL_SPUCE=ON \
+        ..
   make
 }
 
 package() {
   cd "$srcdir/$pkgname/build"
   make DESTDIR="$pkgdir" install
-}
 
+  install -Dm644 "$srcdir/$pkgname/flow/Desktop/pothos-flow.desktop" "$pkgdir/usr/share/applications/pothos-flow.desktop"
+  install -Dm644 "$srcdir/$pkgname/flow/Desktop/pothos-flow-128.png" "$pkgdir/usr/share/pixmaps/pothos-flow.png"
+}
