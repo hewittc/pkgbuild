@@ -1,0 +1,28 @@
+# Maintainer: Christopher Hewitt <hewittc@users.noreply.github.com>
+pkgname=nmonitor-git
+pkgver=r118.564d212
+pkgrel=1
+pkgdesc='Another ncurses-based graph/system stats monitor'
+arch=('i686' 'x86_64')
+url='https://github.com/registerfault/nMonitor'
+license=('MIT')
+depends=('ncurses')
+options=(!strip)
+source=("$pkgname::git+https://github.com/registerfault/nMonitor.git")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/${pkgname}"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  cd "${srcdir}/${pkgname}"
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}"
+  make DESTDIR="$pkgdir" install
+}
