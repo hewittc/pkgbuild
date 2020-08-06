@@ -1,0 +1,40 @@
+# Maintainer: Christopher Hewitt <hewittc@users.noreply.github.com>
+pkgname=pothos-liquid-dsp-git
+pkgver=r57.566989d
+pkgrel=1
+pkgdesc="Block toolkit for Liquid DSP processing cores for Pothos"
+arch=('i686' 'x86_64')
+url="https://github.com/pothosware/PothosLiquidDSP"
+license=('custom:boost')
+depends=('pothos' 'liquid-dsp')
+makedepends=('cmake' 'python-mako' 'python-ply' 'python-yaml')
+provides=('pothos-liquid-dsp')
+conflicts=('pothos-liquid-dsp')
+
+_gitname=pothosliquiddsp
+_gitbranch=master
+source=(
+  "$pkgname::git+https://github.com/pothosware/$_gitname#branch=$_gitbranch"
+)
+sha256sums=(
+  'SKIP'
+)
+
+pkgver() {
+  cd "$srcdir/$pkgname"
+  printf "r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)"
+}
+
+build() {
+  mkdir -p "$srcdir/$pkgname/build"
+  cd "$srcdir/$pkgname/build"
+  cmake -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        ..
+  make
+}
+
+package() {
+  cd "$srcdir/$pkgname/build"
+  make DESTDIR="$pkgdir" install
+}
