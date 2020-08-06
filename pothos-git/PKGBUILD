@@ -1,11 +1,11 @@
 # Maintainer: Christopher Hewitt <hewittc@users.noreply.github.com>
 pkgname=pothos-git
-pkgver=r3057.d8d8ec81
+pkgver=r3076.534c3371
 pkgrel=1
 pkgdesc="The Pothos data-flow framework"
 arch=('i686' 'x86_64')
 url="https://github.com/pothosware/PothosCore"
-license=('boost')
+license=('custom:boost')
 depends=('python')
 optdepends=('soapysdr' 'qwt' 'portaudio')
 makedepends=('cmake' 'doxygen' 'nlohmann-json')
