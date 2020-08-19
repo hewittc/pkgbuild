@@ -1,5 +1,5 @@
 pkgname="radare2-git"
-pkgver=r23931.f31e6ca527
+pkgver=r24568.5f0be49fd1
 pkgrel=1
 pkgdesc="Open-source tools to disasm, debug, analyze and manipulate binary files"
 arch=('i686' 'x86_64' 'armv7h' 'aarch64')
@@ -7,11 +7,12 @@ url="http://radare.org"
 license=('GPL3' 'LGPL3')
 
 makedepends=('meson' 'ninja')
+depends=('libuv' 'tree-sitter')
 
 provides=('radare2')
 conflicts=('radare2')
 
-source=("$pkgname"::"git://github.com/radare/radare2.git")
+source=("$pkgname"::"git+https://github.com/radare/radare2.git")
 sha256sums=('SKIP')
 
 pkgver () {
@@ -27,6 +28,5 @@ build() {
 package() {
   cd "${srcdir}/${pkgname}"
   DESTDIR="${pkgdir}" ninja -C build install
-  ln -s "radare2" "${pkgdir}/usr/bin/r2"
 }
 
