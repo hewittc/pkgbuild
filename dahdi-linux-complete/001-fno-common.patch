@@ -1,0 +1,33 @@
+--- dahdi-linux-complete-3.1.0+3.1.0/tools/xpp/mpptalk.c.old	2020-08-30 15:45:03.078366493 -0600
++++ dahdi-linux-complete-3.1.0+3.1.0/tools/xpp/mpptalk.c	2020-08-30 15:45:23.498089447 -0600
+@@ -237,7 +237,7 @@
+ 		MEMBER(MPP, TWS_PORT_GET_REPLY);
+ 		MEMBER(MPP, TWS_PWR_GET);
+ 		MEMBER(MPP, TWS_PWR_GET_REPLY);
+-} PACKED members;
++} PACKED;
+ 
+ /*
+  * Statuses
+--- dahdi-linux-complete-3.1.0+3.1.0/tools/xpp/xtalk/xtalk_sync.c.old	2020-08-30 15:45:41.397847336 -0600
++++ dahdi-linux-complete-3.1.0+3.1.0/tools/xpp/xtalk/xtalk_sync.c	2020-08-30 15:45:58.627592140 -0600
+@@ -60,7 +60,7 @@
+ 	MEMBER(XTALK, ACK);
+ 	MEMBER(XTALK, PROTO_GET);
+ 	MEMBER(XTALK, PROTO_GET_REPLY);
+-} PACKED members;
++} PACKED;
+ 
+ const struct xtalk_protocol	xtalk_sync_proto = {
+ 	.name	= "XTALK-SYNC",
+--- dahdi-linux-complete-3.1.0+3.1.0/tools/xpp/xtalk/xtalk_raw.c.old	2020-08-30 15:45:35.747923674 -0600
++++ dahdi-linux-complete-3.1.0+3.1.0/tools/xpp/xtalk/xtalk_raw.c	2020-08-30 15:45:50.617713414 -0600
+@@ -48,7 +48,7 @@
+ 
+ union XTALK_PDATA(XTALK) {
+ 	MEMBER(XTALK, ACK);
+-} PACKED members;
++} PACKED;
+ 
+ const struct xtalk_protocol	xtalk_raw_proto = {
+ 	.name	= "XTALK-RAW",

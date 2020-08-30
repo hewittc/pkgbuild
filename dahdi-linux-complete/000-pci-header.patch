@@ -1,0 +1,11 @@
+--- dahdi-linux-complete-3.1.0+3.1.0/linux/include/dahdi/kernel.h	2020-08-30 15:32:43.077659086 -0600
++++ dahdi-linux-complete-3.1.0+3.1.0/linux/include/dahdi/kernel.h	2020-08-30 15:38:01.573913052 -0600
+@@ -59,7 +59,7 @@
+ #include <linux/poll.h>
+ 
+ #ifdef CONFIG_PCI
+-#include <linux/pci-aspm.h>
++#include <linux/pci.h>
+ #endif
+ 
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 29)

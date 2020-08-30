@@ -1,0 +1,37 @@
+pkgname=dahdi-linux-complete
+pkgver=3.1.0
+pkgrel=1
+pkgdesc='Drivers for telephony-related hardware'
+arch=('i686' 'x86_64')
+url='https://wiki.asterisk.org/wiki/display/DAHDI/DAHDI'
+license=('GPL2')
+
+depends=('linux-lts' 'libusb' 'perl')
+makedepends=('linux-lts-headers')
+conflicts=('zaptel')
+
+source=("https://downloads.asterisk.org/pub/telephony/${pkgname}/releases/${pkgname}-${pkgver}+${pkgver}.tar.gz"
+        "dahdi.service"
+        "000-pci-header.patch"
+        "001-fno-common.patch")
+sha256sums=('30d8cfcbef9c3b6d7064df5dad7e9b752a9f635ee73c95d5e2931c5e46cc9f40'
+            '7c91314aacab22ffd02794abfa7db49f44a796ea54f3e2bc4276616e68b90e0f'
+            '83b3b78957e3d86e16d345570fe04a3ce9c2fb4242669f6980ce9d9922c9e69e'
+            '3d8af1de7015a731ebdb7597ca6da504f77c8ca20ab92a8534aa6fc6dd0cc831')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}+${pkgver}"
+  patch -p1 < ../000-pci-header.patch
+  patch -p1 < ../001-fno-common.patch
+}
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}+${pkgver}"
+  make DESTDIR="${pkgdir}" all
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}+${pkgver}"
+  make DYNFS=1 DESTDIR="${pkgdir}" install
+}
+
