@@ -1,0 +1,38 @@
+_pkgbase=dahdi
+pkgname=dahdi-linux-dkms-git
+pkgver=v3.1.0.r8.g97e744a
+pkgrel=1
+pkgdesc='Drivers for telephony-related hardware'
+arch=('i686' 'x86_64')
+url='https://wiki.asterisk.org/wiki/display/DAHDI/DAHDI'
+license=('GPL2')
+
+makedepends=('linux-headers')
+depends=('linux' 'libusb' 'perl' 'dkms')
+conflicts=('zaptel')
+
+source=(${pkgname}::"git://git.asterisk.org/dahdi/linux.git#branch=next"
+        "dahdi.service"
+        "dkms.conf")
+sha256sums=('SKIP'
+            '7c91314aacab22ffd02794abfa7db49f44a796ea54f3e2bc4276616e68b90e0f'
+            'e7923e1b571431bdade42afecbb178efbf94ebd482468bdf397f23976bd89157')
+
+pkgver() {
+  cd ${pkgname}
+  git describe --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+package() {
+  install -Dm644 ${srcdir}/dkms.conf ${pkgdir}/usr/src/${_pkgbase}-${pkgver}/dkms.conf
+
+  sed -e "s/@_PKGBASE@/${_pkgbase}/" \
+      -e "s/@PKGVER@/${pkgver}/" \
+      -i "${pkgdir}/usr/src/${_pkgbase}-${pkgver}/dkms.conf"
+
+  mkdir -p ${pkgdir}/usr/src/${_pkgbase}-${pkgver}
+  for f in {build_tools,drivers,include,Makefile}; do
+  cp -Rp ${pkgname}/${f} ${pkgdir}/usr/src/${_pkgbase}-${pkgver}
+  done
+}
+
