@@ -9,7 +9,9 @@ license=('GPL2')
 
 makedepends=('linux-headers')
 depends=('linux' 'libusb' 'perl' 'dkms')
-conflicts=('zaptel')
+
+conflicts=('dahdi-linux' 'zaptel')
+provides=('dahdi-linux')
 
 source=(${pkgname}::"git://git.asterisk.org/dahdi/linux.git#branch=next"
         "dahdi.service"
@@ -34,5 +36,8 @@ package() {
   for f in {build_tools,drivers,include,Makefile}; do
   cp -Rp ${pkgname}/${f} ${pkgdir}/usr/src/${_pkgbase}-${pkgver}
   done
+
+  mkdir -p ${pkgdir}/usr/include/dahdi
+  cp -Rp ${pkgname}/include/dahdi/*.h ${pkgdir}/usr/include/dahdi/
 }
 
