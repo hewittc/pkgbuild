@@ -1,5 +1,5 @@
 pkgname="radare2-git"
-pkgver=r24568.5f0be49fd1
+pkgver=r24598.0b671bc357
 pkgrel=1
 pkgdesc="Open-source tools to disasm, debug, analyze and manipulate binary files"
 arch=('i686' 'x86_64' 'armv7h' 'aarch64')
@@ -22,7 +22,8 @@ pkgver () {
 
 build() {
   cd "${srcdir}/${pkgname}"
-  $(PYTHON) sys/meson.py --prefix="/usr" --shared
+  arch-meson build
+  ninja -C build
 }
 
 package() {
