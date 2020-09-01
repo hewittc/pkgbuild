@@ -7,8 +7,8 @@ arch=('i686' 'x86_64')
 url='https://wiki.asterisk.org/wiki/display/DAHDI/DAHDI'
 license=('GPL2')
 
-makedepends=('linux-headers')
-depends=('linux' 'libusb' 'perl' 'dkms')
+optdepends=('linux-headers' 'linux-lts-headers')
+depends=('libusb' 'perl' 'dkms')
 
 conflicts=('dahdi-linux' 'zaptel')
 provides=('dahdi-linux')
