@@ -1,0 +1,44 @@
+pkgname=dahdi-tools-git
+pkgver=v3.1.0.r0.g31cca18
+pkgrel=1
+pkgdesc='Drivers for telephony-related hardware'
+arch=('i686' 'x86_64')
+url='https://wiki.asterisk.org/wiki/display/DAHDI/DAHDI'
+license=('GPL2')
+
+depends=('dahdi-linux' 'perl' 'libusb' 'libnewt' 'libpcap')
+
+conflicts=('dahdi-tools')
+provides=('dahdi-tools')
+
+source=(${pkgname}::"git://git.asterisk.org/dahdi/tools.git#branch=next"
+        "000-fno-common.patch")
+sha256sums=('SKIP' 'SKIP')
+
+pkgver() {
+  cd ${pkgname}
+  git describe --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+prepare() {
+  cd ${pkgname}
+  patch -p1 < ../000-fno-common.patch
+}
+
+build() {
+  cd ${pkgname}
+  autoreconf -i
+  ./configure
+  make DESTDIR="${pkgdir}" all
+}
+
+package() {
+  cd ${pkgname}
+  make DESTDIR="${pkgdir}" install
+
+  install -D -m 0644 xpp/genconf_parameters "${pkgdir}/etc/dahdi/genconf_parameters"
+
+  #mv "${pkgdir}/usr/lib/udev/rules.d/xpp.rules" "${pkgdir}/usr/lib/udev/rules.d/98-xpp.rules"
+  #rm "${pkgdir}/usr/lib/udev/rules.d/dahdi.rules"
+}
+
