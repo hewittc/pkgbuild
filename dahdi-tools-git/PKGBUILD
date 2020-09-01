@@ -28,17 +28,20 @@ prepare() {
 build() {
   cd ${pkgname}
   autoreconf -i
-  ./configure
+  ./configure --sbindir=/usr/bin
   make DESTDIR="${pkgdir}" all
 }
 
 package() {
   cd ${pkgname}
   make DESTDIR="${pkgdir}" install
+  make DESTDIR="${pkgdir}" install-config
 
-  install -D -m 0644 xpp/genconf_parameters "${pkgdir}/etc/dahdi/genconf_parameters"
+  rm -rf ${pkgdir}/usr/lib/dracut
 
-  #mv "${pkgdir}/usr/lib/udev/rules.d/xpp.rules" "${pkgdir}/usr/lib/udev/rules.d/98-xpp.rules"
-  #rm "${pkgdir}/usr/lib/udev/rules.d/dahdi.rules"
+  mkdir -p "${pkgdir}/usr/lib"
+  mv "${pkgdir}/etc/udev/" "${pkgdir}/usr/lib/"
+  mv "${pkgdir}/usr/lib/udev/rules.d/dahdi.rules" "${pkgdir}/usr/lib/udev/rules.d/98-dahdi.rules"
+  mv "${pkgdir}/usr/lib/udev/rules.d/xpp.rules" "${pkgdir}/usr/lib/udev/rules.d/98-xpp.rules"
 }
 
