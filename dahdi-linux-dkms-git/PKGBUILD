@@ -15,14 +15,21 @@ provides=('dahdi-linux')
 
 source=(${pkgname}::"git://git.asterisk.org/dahdi/linux.git#branch=next"
         "dahdi.service"
-        "dkms.conf")
+        "dkms.conf"
+        "000-forgotten-wctdm24xxp.patch")
 sha256sums=('SKIP'
             '7c91314aacab22ffd02794abfa7db49f44a796ea54f3e2bc4276616e68b90e0f'
-            'e7923e1b571431bdade42afecbb178efbf94ebd482468bdf397f23976bd89157')
+            'e7923e1b571431bdade42afecbb178efbf94ebd482468bdf397f23976bd89157'
+            'f7a74580121fedfe8baba044c6ab2983dbfd9c1b8c87b1936850d388c42af8c4')
 
 pkgver() {
   cd ${pkgname}
   git describe --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+prepare() {
+  cd ${pkgname}
+  patch -p1 < ../000-forgotten-wctdm24xxp.patch
 }
 
 package() {
