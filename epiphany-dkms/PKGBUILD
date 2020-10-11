@@ -1,6 +1,6 @@
 _pkgbase=epiphany
 pkgname=epiphany-dkms
-pkgver=r4.5f91f32
+pkgver=r5.2b9a0c9
 pkgrel=1
 pkgdesc='Driver for Adapteva Parallella Epiphany eLink'
 arch=('armv7h')
@@ -32,5 +32,8 @@ package() {
   for f in {build_tools,drivers,Makefile}; do
     cp -Rp ${pkgname}/${f} ${pkgdir}/usr/src/${_pkgbase}-${pkgver}
   done
+
+  mkdir -p ${pkgdir}/usr/lib/udev/rules.d
+  cp -p ${pkgname}/udev/20-epiphany.rules ${pkgdir}/usr/lib/udev/rules.d/20-epiphany.rules
 }
 
