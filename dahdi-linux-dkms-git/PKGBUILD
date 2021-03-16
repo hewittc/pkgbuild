@@ -1,6 +1,6 @@
 _pkgbase=dahdi
 pkgname=dahdi-linux-dkms-git
-pkgver=v3.1.0.r8.g97e744a
+pkgver=v3.1.0.r12.g5c840cf
 pkgrel=1
 pkgdesc='Drivers for telephony-related hardware'
 arch=('i686' 'x86_64')
@@ -15,10 +15,12 @@ provides=('dahdi-linux')
 
 source=(${pkgname}::"git://git.asterisk.org/dahdi/linux.git#branch=next"
         "dahdi.service"
+	"dahdi.rules"
         "dkms.conf"
         "000-forgotten-wctdm24xxp.patch")
 sha256sums=('SKIP'
-            '7c91314aacab22ffd02794abfa7db49f44a796ea54f3e2bc4276616e68b90e0f'
+            '20057cf526abe95cdc34d58b843b17f35d0e591550e4088878f58321d91bd9cc'
+            '9d941960433b8e6a4b5979ff3e63bcbabca39cd53ad98a536658d5db4eb76559'
             'e7923e1b571431bdade42afecbb178efbf94ebd482468bdf397f23976bd89157'
             'f7a74580121fedfe8baba044c6ab2983dbfd9c1b8c87b1936850d388c42af8c4')
 
@@ -34,6 +36,8 @@ prepare() {
 
 package() {
   install -Dm644 ${srcdir}/dkms.conf ${pkgdir}/usr/src/${_pkgbase}-${pkgver}/dkms.conf
+  install -Dm644 ${srcdir}/dahdi.service ${pkgdir}/usr/lib/systemd/system/dahdi.service
+  install -Dm644 ${srcdir}/dahdi.rules ${pkgdir}/usr/lib/udev/rules.d/99-dahdi.rules
 
   sed -e "s/@_PKGBASE@/${_pkgbase}/" \
       -e "s/@PKGVER@/${pkgver}/" \

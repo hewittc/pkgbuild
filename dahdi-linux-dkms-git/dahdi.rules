@@ -1,0 +1,1 @@
+KERNEL=="dahdi", TAG+="systemd", ENV{SYSTEMD_WANTS}="dahdi.service"
