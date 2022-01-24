@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=EEZ Studio
+Comment=Modular visual low-code development tool and SCPI controller
+Exec=eezstudio
+Terminal=false
+Type=Application
+Icon=eezstudio
+StartupWMClass=EEZ Studio
+Categories=Engineering

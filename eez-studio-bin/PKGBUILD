@@ -1,0 +1,50 @@
+_pkgname=eez-studio
+pkgname=${_pkgname}-bin
+pkgver=0.9.89
+pkgrel=1
+pkgdesc="Cross-platform visual low-code development tool and SCPI instrument controller"
+arch=('x86_64')
+url="https://github.com/eez-open/studio"
+license=('GPL3')
+provides=(${_pkgname})
+conflicts=(${_pkgname}
+          'eez-studio')
+replaces=('eez-studio')
+depends=()
+makedepends=('coreutils')
+backup=()
+
+options=(!strip)
+source=("${_pkgname}-${pkgver}.AppImage::https://github.com/eez-open/studio/releases/download/v${pkgver}/EEZ-Studio-${pkgver}.AppImage"
+        "${_pkgname}.desktop")
+sha256sums=('8b2cb4356faaf61d7c36234d85f68bba625111b5efa1b098b46ace1832838649'
+            '8e4035f9f06821abf00ae0b7f941c51996cd53794f7b122703e33b80fd4d7643')
+
+prepare() {
+    chmod u+x ${srcdir}/${_pkgname}-${pkgver}.AppImage
+
+    ${srcdir}/${_pkgname}-${pkgver}.AppImage --appimage-extract
+}
+
+package() {
+    find ${srcdir}/squashfs-root/locales/ -type d -exec chmod 755 {} +
+    find ${srcdir}/squashfs-root/resources/ -type d -exec chmod 755 {} +
+    find ${srcdir}/squashfs-root/swiftshader -type d -exec chmod 755 {} +
+
+    install -d ${pkgdir}/opt/${_pkgname}
+    cp -r ${srcdir}/squashfs-root/* ${pkgdir}/opt/${_pkgname}
+
+    # remove broken or unused files and directories
+    rm -r ${pkgdir}/opt/${_pkgname}/usr/
+    rm ${pkgdir}/opt/${_pkgname}/AppRun
+
+    find ${srcdir}/squashfs-root/usr/share/icons/ -type d -exec chmod 755 {} +
+
+    install -d ${pkgdir}/usr/share/icons
+    cp -r ${srcdir}/squashfs-root/usr/share/icons/hicolor ${pkgdir}/usr/share/icons/hicolor
+
+    install -d ${pkgdir}/usr/bin
+    ln -s ../../opt/${_pkgname}/eezstudio ${pkgdir}/usr/bin/eezstudio
+
+    install -Dm644 ${srcdir}/${_pkgname}.desktop ${pkgdir}/usr/share/applications/${_pkgname}.desktop
+}
