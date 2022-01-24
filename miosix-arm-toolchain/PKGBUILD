@@ -1,0 +1,21 @@
+pkgname="miosix-toolchain-arm"
+pkgver=2020.08
+pkgrel=1
+pkgdesc="Toolchain for cross-compiling Miosix kernel for ARM"
+arch=('x86_64')
+url="https://miosix.org/wiki/index.php?title=Miosix_Toolchain"
+license=('GPL3')
+options=(!strip)
+
+source=("https://miosix.org/toolchain/MiosixToolchainInstaller.run")
+sha256sums=('2b3b1d69a767d1bd3f8d8d21372fabc109b6be39d6524003f8324dce931a1267')
+
+package() {
+  mkdir -p "${pkgdir}/opt/arm-miosix-eabi"
+  cd "${pkgdir}/opt/arm-miosix-eabi"
+
+  sh "${srcdir}/MiosixToolchainInstaller.run" --tar xf
+
+  rm "${pkgdir}/opt/arm-miosix-eabi/installer.sh"
+  rm "${pkgdir}/opt/arm-miosix-eabi/uninstall.sh"
+}
